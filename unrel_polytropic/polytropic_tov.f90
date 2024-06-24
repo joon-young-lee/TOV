@@ -68,7 +68,6 @@ contains
         final_mass_radius_iteration(2) = r_arr(i)/1e5_8
         final_mass_radius_iteration(3) = i
 
-    
 
 
         ! Deallocate arrays
