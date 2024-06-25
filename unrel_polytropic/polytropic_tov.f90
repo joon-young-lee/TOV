@@ -1,4 +1,4 @@
-module TOV_solver
+module TOV_solver ! Unrelativistic, pure neutron
     implicit none
 
     ! Constants and initial conditions
@@ -41,13 +41,13 @@ contains
             k1_m = dm_dr(r, p, m)
 
             k2_p = dp_dr(r + del_r / 2.0_8, p + k1_p / 2.0_8, m + k1_m / 2.0_8)
-            k2_m = dm_dr(r + del_r / 2.0_8, p + k1_p / 2.0_8, m + k1_p / 2.0_8)
+            k2_m = dm_dr(r + del_r / 2.0_8, p + k1_p / 2.0_8, m + k1_m / 2.0_8)
 
             k3_p = dp_dr(r + del_r / 2.0_8, p + k2_p / 2.0_8, m + k2_m / 2.0_8)
-            k3_m = dm_dr(r + del_r / 2.0_8, p + k2_p / 2.0_8, m + k2_p / 2.0_8)
+            k3_m = dm_dr(r + del_r / 2.0_8, p + k2_p / 2.0_8, m + k2_m / 2.0_8)
 
             k4_p = dp_dr(r + del_r, p + k3_p, m + k3_m)
-            k4_m = dm_dr(r + del_r, p + k3_p, m + k3_p)
+            k4_m = dm_dr(r + del_r, p + k3_p, m + k3_m)
 
             ! Update pressure and mass using the weighted sum of the Runge-Kutta coefficients
             p_new = p_arr(i) + (k1_p + 2.0_8 * k2_p + 2.0_8 * k3_p + k4_p) / 6.0_8 * del_r
@@ -88,7 +88,8 @@ contains
         implicit none
         real(8), intent(in) :: r, p, m
         ! Your derivative calculation here
-        dm_dr = 4 * pi * r**2 * (p/K) ** (1/gamma) / c2
+        dm_dr = 4 * pi * r**2 * (p/K) ** (1/gamma) /&
+        c2 / SQRT(1-2 * G * m/(c2*r)) 
     end function dm_dr
 
 end module TOV_solver

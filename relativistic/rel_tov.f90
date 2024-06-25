@@ -2,7 +2,7 @@ program main
     use TOV_solver
     implicit none
 
-    real(8), parameter :: p_i = 1.0e32_8, p_f = 1.0e34_8
+    real(8), parameter :: p_i = 1.0e30_8, p_f = 1.0e42_8
     real(8), parameter :: del_r = 1.0e2_8
     integer, parameter :: maxit = 1e7
     integer, parameter :: step = 100000
@@ -17,16 +17,16 @@ program main
     ! Output the results
     print *, 'Initial pressure', p_i, 'dyen/cm^2'
     print *, 'Delta r', del_r, 'cm'
-    print *, "Final mass:", result(1), 'M_0'
-    print *, "Final radius:", result(2), 'km'
+    print *, 'Mass:', result(1), 'M_0'
+    print *, 'Radius:', result(2), 'km'
     print *, 'Iteration', result(3), 'iterations'
-
+    
     ! Write arrays to file
-    !open(unit=10, file='tov_data_.txt', status='replace')
-    !do i = 1, step+1
-        !result = solve_TOV(p_i + (i-1) * (p_f - p_i)/step, del_r, maxit)
-        !write(10, *) p_i + (i-1) * (p_f - p_i)/step, result(1), result(2)
-    !end do
+    open(unit=10, file='tov_data.txt', status='replace')
+    do i = 1, step+1
+        result = solve_TOV(p_i + (i-1) * (p_f - p_i)/step, del_r, maxit)
+        write(10, *) p_i + (i-1) * (p_f - p_i)/step, result(1), result(2)
+    end do
 
 end program main
 

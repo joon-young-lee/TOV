@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import units_cgs as cgs
+
 
 # Read the data from the file
-data = np.loadtxt('./unrel_polytropic/tov_data_.txt')
+data = np.loadtxt('./tov_data.txt')
 
 # Separate the columns into variables
 p0 = data[:, 0]
@@ -38,31 +38,22 @@ plt.show()
 
 
 # Create the First Plot
-fig, ax1 = plt.subplots(figsize=(10, 6))  # Adjust the figure size here
-ax1.set_xscale('log')
-ax1.set_xlabel(r'Initial Pressure($dyne/cm^2$)')
-ax1.set_ylabel(r'$M_\odot$')  # Adjust labelpad as needed
-ax1.plot(p0, M, color='b', label='Mass')
+fig, ax1 = plt.subplots(figsize=(10, 6))
+
+
+
+ax1.set_ylabel('Radius') 
+ax1.plot(p0, R, color='r', label='Radius in km')
 ax1.tick_params(axis='y')
+ax1.set_xscale('log')
 ax1.legend()
-# Set y-ticks
-#ax1.set_yticks(np.arange(0, 1.1, 0.1))
 
-# Create Twin Axes
 ax2 = ax1.twinx()
-
-# Plot the Second Data on Twin Axes
-ax2.set_ylabel('Radius')  # Adjust labelpad as needed
-ax2.plot(p0, R, color='r', label='Radius in km')
-ax2.tick_params(axis='y')
 ax2.set_xscale('log')
+ax2.set_xlabel(r'Initial Pressure($dyne/cm^2$)')
+ax2.set_ylabel(r'$M_\odot$')  # Adjust labelpad as needed
+ax2.plot(p0, M, color='b', label='Mass')
+ax2.tick_params(axis='y')
 ax2.legend()
-# Set y-ticks for the second y-axis
-#ax2.set_yticks(np.arange(-1, 1.1, 0.1))
-
-# Move the Legend
-# lines, labels = ax1.get_legend_handles_labels()
-# lines2, labels2 = ax2.get_legend_handles_labels()
-# ax1.legend(lines + lines2, labels + labels2, loc='upper left')
-#plt.grid()
+plt.savefig('p0_M_R_.png')
 plt.show()
