@@ -89,7 +89,7 @@ contains
         real(8), intent(in) :: r, p, m
         ! Your derivative calculation here
         dm_dr = 4 * pi * r**2 * (p/K) ** (1/gamma) /&
-        c2 / SQRT(1-2 * G * m/(c2*r)) 
+        c2 !/ SQRT(1-2 * G * m/(c2*r)) 
     end function dm_dr
 
 end module TOV_solver

@@ -45,8 +45,7 @@ ax1.set_ylabel(r'$M_\odot$')  # Adjust labelpad as needed
 ax1.plot(p0, M, color='b', label='Mass')
 ax1.tick_params(axis='y')
 ax1.legend()
-# Set y-ticks
-#ax1.set_yticks(np.arange(0, 1.1, 0.1))
+
 
 # Create Twin Axes
 ax2 = ax1.twinx()
@@ -57,12 +56,8 @@ ax2.plot(p0, R, color='r', label='Radius in km')
 ax2.tick_params(axis='y')
 ax2.set_xscale('log')
 ax2.legend()
-# Set y-ticks for the second y-axis
-#ax2.set_yticks(np.arange(-1, 1.1, 0.1))
 
-# Move the Legend
-# lines, labels = ax1.get_legend_handles_labels()
-# lines2, labels2 = ax2.get_legend_handles_labels()
-# ax1.legend(lines + lines2, labels + labels2, loc='upper left')
+
+
 #plt.grid()
 plt.show()

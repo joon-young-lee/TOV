@@ -93,7 +93,7 @@ contains
         real(8), intent(in) :: r, p, m
         ! TOV equation
         dm_dr = 4 * pi * r**2 * e(root(p)) /&
-        c2 / SQRT(1-2 * G * m/(c2*r)) 
+        c2 !/ SQRT(1-2 * G * m/(c2*r)) 
     end function dm_dr
 
     real(8) function P(x) ! Function of pressure

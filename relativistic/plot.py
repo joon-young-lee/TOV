@@ -1,15 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.ticker import FixedLocator, ScalarFormatter
+
 
 # Read the data from the file
-data = np.loadtxt('./R_M_data.txt')
-
+data1 = np.loadtxt('./R_M_data_rel.txt')
+data2 = np.loadtxt('./R_M_data_unrel.txt')
 # Separate the columns into variables
-p0 = data[:, 0]
-M = data[:, 1]
-R = data[:, 2]
-
+p0 = data1[:, 0]
+M = data1[:, 1]
+R = data1[:, 2]
+p0_ = data2[:, 0]
+M_ = data2[:, 1]
+R_ = data2[:, 2]
 
 
 # Create plots
@@ -41,28 +43,27 @@ plt.show()
 
 # Create the First Plot
 fig, ax1 = plt.subplots(figsize=(10, 6))
-xticks = [10**i for i in range(30, 43)]
+xticks = [10**i for i in range(29, 43)]
 
 plt.title('Radius and Mass vs. Initial Pressure')
 ax1.set_ylabel('Radius in km') 
-ax1.plot(p0, R, '*', color='r', markersize=1, label='Radius in km')
+ax1.plot(p0, R, color='r', label='Relativistic Radius')
+ax1.plot(p0_, R_, '--',color='g', label='Unrelativistic Radius')
 ax1.tick_params(axis='y')
 ax1.set_xscale('log')
 ax1.legend(loc='upper left')  # Adjust legend location
 ax1.set_xticks(xticks)
-ax1.xaxis.set_major_formatter(ScalarFormatter())
-ax1.xaxis.set_major_locator(FixedLocator(xticks))
+ax1.set_xlim([1.e30, 1.e42])
 
 ax2 = ax1.twinx()
 ax2.set_xscale('log')
 ax2.set_xlabel(r'Initial Pressure ($dyne/cm^2$)')
 ax2.set_ylabel(r'Mass in $M_\odot$')
-ax2.plot(p0, M, '*', color='b', markersize=1, label='Mass')
+ax2.plot(p0, M, color='b', label='Relativistic Mass')
+ax2.plot(p0_, M_, '--',color='k', label='Unrelativistic Mass')
 ax2.tick_params(axis='y')
 ax2.legend(loc='upper right')  # Adjust legend location
+ax2.set_ylim([0, 0.8])
 
-# Set xtick labels
-ax1.set_xticklabels([f'$10^{{{i}}}$' for i in range(30, 43)])
-
-plt.savefig('p0_M_R_.png')
+plt.savefig('p0_M_R_1.png')
 plt.show()
