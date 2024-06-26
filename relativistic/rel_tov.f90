@@ -2,12 +2,13 @@ program main
     use TOV_solver
     implicit none
 
-    real(8), parameter :: p_i = 1.0e30_8, p_f = 1.0e42_8
+    real(8) :: p_i = 1.0e30_8, p_f = 1.0e31_8
     real(8), parameter :: del_r = 1.0e2_8
     integer, parameter :: maxit = 1e7
-    integer, parameter :: step = 100000
+    integer, parameter :: step = 1000
     real(8) :: result(3)
-    integer :: i
+    integer :: i, j
+    
     ! Call the TOV function
     result = solve_TOV(p_i, del_r, maxit)
     ! result(1) = mass
@@ -22,11 +23,14 @@ program main
     print *, 'Iteration', result(3), 'iterations'
     
     ! Write arrays to file
-    open(unit=10, file='tov_data.txt', status='replace')
-    do i = 1, step+1
-        result = solve_TOV(p_i + (i-1) * (p_f - p_i)/step, del_r, maxit)
-        write(10, *) p_i + (i-1) * (p_f - p_i)/step, result(1), result(2)
+    do j = 0, 11
+        open(unit=10, file='R_M_data.txt', status='old', access='append')
+        p_i = p_i * 10 ** j
+        p_f = p_f * 10 ** j
+        do i = 1, step+1
+            result = solve_TOV(p_i + (i-1) * (p_f - p_i)/step, del_r, maxit)
+            write(10, *) p_i + (i-1) * (p_f - p_i)/step, result(1), result(2)
+        end do
     end do
-
 end program main
 
