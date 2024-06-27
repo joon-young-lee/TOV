@@ -1,7 +1,7 @@
 module TOV_solver ! Relativistic, pure neutron
+    ! consideration of gravitational potential
     implicit none
-    ! p = e_0/8 * (2 * x ** 3 + x)(x**2 + 1)**(1/2) - arcsinh(x)
-    ! e = e_0/24 * (2 * x ** 3 - 3 * x)(x**2 + 1)**(1/2) + 3 * arcsinh(x)
+
     ! Constants and initial conditions
     real(8), parameter :: c = 2.99792e10_8
     real(8), parameter :: c2 = c ** 2
@@ -93,7 +93,7 @@ contains
         real(8), intent(in) :: r, p, m
         ! TOV equation
         dm_dr = 4 * pi * r**2 * e(root(p)) /&
-        c2 !/ SQRT(1-2 * G * m/(c2*r)) 
+        c2 / SQRT(1-2 * G * m/(c2*r)) 
     end function dm_dr
 
     real(8) function P(x) ! Function of pressure
@@ -118,7 +118,7 @@ contains
     integer :: j, maxit
 
     ! Parameters
-    maxit = 10000
+    maxit = 1000
     tol = 1.0e-4_8
 
     ! Initial guess

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import units_cgs as cgs
 
 # Read the data from the file
-data = np.loadtxt('./unrel_polytropic/tov_data_.txt')
+data = np.loadtxt('./nonrel_polytropic/tov_data_.txt')
 
 # Separate the columns into variables
 p0 = data[:, 0]
