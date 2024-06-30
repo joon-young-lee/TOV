@@ -29,9 +29,12 @@ def TOV(gamma, maxit, del_r, p0): # inputs: gamma, max iteration,  ∆r, initial
     dm_dr = lambda r, p, m: 4 * cgs.pi * (p/K) ** (1/gamma)  * r ** 2 / cgs.c2
         # np.sqrt(1 - 2 * cgs.G * m/r)
     
-    r_arr = [1.0e-10]
-    p_arr = [p0]
-    m_arr = [1.0e-10]
+    r_arr = np.zeros(maxit+1)
+    p_arr = np.zeros(maxit+1)
+    m_arr = np.zeros(maxit+1) 
+    r_arr[0] = 1.0e-10
+    p_arr[0] = p0
+    m_arr[0] = 1.0e-10
     # Runge-Kutta 4th order
     i = 0
     while i <= maxit and p_arr[i] > 0:
@@ -41,33 +44,34 @@ def TOV(gamma, maxit, del_r, p0): # inputs: gamma, max iteration,  ∆r, initial
         k1_m = dm_dr(r_arr[i], p_arr[i], m_arr[i])
         
         k2_p = dp_dr(r_arr[i] + del_r/2, p_arr[i] + k1_p/2, m_arr[i] + k1_m/2)
-        k2_m = dm_dr(r_arr[i] + del_r/2, p_arr[i] + k1_p/2, m_arr[i] + k1_p/2)
+        k2_m = dm_dr(r_arr[i] + del_r/2, p_arr[i] + k1_p/2, m_arr[i] + k1_m/2)
         
         k3_p = dp_dr(r_arr[i] + del_r/2, p_arr[i] + k2_p/2, m_arr[i] + k2_m/2)
-        k3_m = dm_dr(r_arr[i] + del_r/2, p_arr[i] + k2_p/2, m_arr[i] + k2_p/2)
+        k3_m = dm_dr(r_arr[i] + del_r/2, p_arr[i] + k2_p/2, m_arr[i] + k2_m/2)
         
         k4_p = dp_dr(r_arr[i] + del_r, p_arr[i] + k3_p, m_arr[i] + k3_m)
-        k4_m = dm_dr(r_arr[i] + del_r, p_arr[i] + k3_p, m_arr[i] + k3_p)
+        k4_m = dm_dr(r_arr[i] + del_r, p_arr[i] + k3_p, m_arr[i] + k3_m)
         
         p_new = p_arr[i] + (k1_p + 2*k2_p + 2*k3_p + k4_p) / 6 * del_r
         m_new = m_arr[i] + (k1_m + 2*k2_m + 2*k3_m + k4_m) / 6 * del_r
         r_new = r_arr[i] + del_r
 
-        p_arr.append(p_new)
-        m_arr.append(m_new)
-        r_arr.append(r_new)
+        p_arr[i+1] = p_new
+        m_arr[i+1] = m_new
+        r_arr[i+1] = r_new
         
         i += 1
     print(f'Total iterations: {i}')
-    return r_arr, p_arr, m_arr, 
+    return r_arr, p_arr, m_arr
     
     
-r, p, m = TOV(gamma = 5/3, maxit = int(1.0e7), del_r = 1., p0 = 1.0e32)
-del_r = 1.
+r, p, m = TOV(gamma = 5/3, maxit = int(1.0e7), del_r = 100., p0 = 1.0e30)
+del_r = 100.
 maxit = int(1.0e7)
 # plt.plot(r, p, color = 'b')
 # plt.show()
 # plt.plot(r, m, color = 'r')
 # plt.show()
 
-print(f'Iteration to {maxit * del_r/1.0e5} km')
+print(max(r)/1e5, 'km')
+print(max(m)/cgs.M0, 'M_0')

@@ -23,19 +23,21 @@ program main
     print *, 'Iteration', result(3), 'iterations'
     
     ! Write arrays to file
-    open(unit=10, file='R_M_gp.txt', status='old', access='append')
-    write(10, *) 'Initial Pressure', 'Mass', 'Radius'
+    open(unit=10, file='R_M_gp.txt', status='old', action='write')
+    write(10, *) 'Initial Pressure, ', 'Mass, ', 'Radius'
     do j = 0, 11
         
         do i = 1, step+1
             result = solve_TOV(p_i + (i-1) * (p_f - p_i)/step, del_r, maxit)
             write(10, *) p_i + (i-1) * (p_f - p_i)/step, result(1), result(2)
-            if i / 100 == integer
+            if (mod(i, 100) == 0) then
+                print *, '---------------------------------------------------'
                 print *, 'Initial pressure', p_i + (i-1) * (p_f - p_i)/step, 'dyen/cm^2'
                 print *, 'Delta r', del_r, 'cm'
                 print *, 'Mass:', result(1), 'M_0'
                 print *, 'Radius:', result(2), 'km'
                 print *, 'Iteration', result(3), 'iterations'
+            end if
         end do
         p_i = p_i * 10
         p_f = p_f * 10

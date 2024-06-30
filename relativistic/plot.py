@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 
 # Read the data from the file
-data1 = np.loadtxt('./R_M_gp.txt')
-data2 = np.loadtxt('./R_M.txt')
+data1 = np.loadtxt('./R_M_gp.txt', skiprows=1)
+data2 = np.loadtxt('./R_M.txt', skiprows=1)
 # Separate the columns into variables
 p0 = data1[:, 0]
 M = data1[:, 1]
@@ -12,33 +12,6 @@ R = data1[:, 2]
 p0_ = data2[:, 0]
 M_ = data2[:, 1]
 R_ = data2[:, 2]
-
-
-# Create plots
-# plt.figure(figsize=(12, 6))
-
-# # Plot initial pressure vs mass
-# plt.subplot(1, 2, 1)
-# plt.plot(p0, M,label=r'Mass in $M_\odot$')
-# plt.xlabel(r'Initial Pressure($p_0$)')
-# plt.ylabel(r'Total Mass($M_\odot$)')
-# plt.xscale('log')
-# plt.title('Initial pressure vs Mass')
-# plt.legend()
-
-# # Plot mass vs radius
-# plt.subplot(1, 2, 2)
-# plt.plot(p0, R,label='Radius in km', color='red')
-# plt.xlabel(r'Initial Pressure($p_0$)')
-# plt.ylabel('Total Radius(km)')
-# plt.xscale('log')
-# plt.title('Initial pressure vs Radius')
-# plt.legend()
-
-# # Show plots
-# plt.tight_layout()
-# plt.savefig('p0_M_R.png')
-# plt.show()
 
 
 # Create the First Plot
