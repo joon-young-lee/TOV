@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-file_name = 'eft_pnm32_000005_ldm_result.dat'
+file_name = 'eft_pnm32_000078_ldm_result.dat'
 data1 = np.loadtxt(file_name)
 
 
