@@ -126,7 +126,7 @@ for j in range(27, 101):
     P = np.zeros(1000)  
     step = 1000
     p_i = 1.e34
-    p_f = np.max(p_arr)
+    p_f = 1.602179e+36
     for l in range(1, step + 1):
         P[l-1] = p_i + (l-1) * (p_f-p_i)/step
         M[l-1], R[l-1] = TOV(EoS, p_arr, P[l-1], del_r, maxit)
