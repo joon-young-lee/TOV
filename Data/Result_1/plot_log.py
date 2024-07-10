@@ -24,7 +24,7 @@ ax1.set_xscale('log')
 ax1.legend(loc='upper left')  # Adjust legend location
 ax1.set_xlabel(r'Initial Pressure $MeV/fm^3$')
 ax1.set_xticks(xticks)
-ax1.set_xlim([1.e0, 1.e4])
+ax1.set_xlim([1.e-1, 1.e4])
 
 ax2 = ax1.twinx()
 ax2.set_xscale('log')
