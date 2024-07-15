@@ -16,67 +16,69 @@ contains
 
     function solve_TOV(p0, del_r, maxit) result(final_mass_radius_iteration)
         implicit none
+        
+        ! character(len=36), intent(in) :: file_name
         real(8), intent(in) :: p0, del_r
-        integer, intent(in) :: maxit
+        integer, intent(in) :: maxit !k
+
         real(8) :: final_mass_radius_iteration(3)
+        
 
         integer :: i, j
-        real(8) :: p, m, r, p_new, m_new, r_new, m_nrel, m_nrel_new
+        real(8) :: p, m, r, r2, r3, r_4, p2, p3, p4, m2, m3, m4
         real(8) :: k1_p, k1_m, k2_p, k2_m, k3_p, k3_m, k4_p, k4_m
-        real(8), allocatable :: r_arr(:), p_arr(:), m_arr(:)
-
-        ! Allocate arrays
-        allocate(r_arr(0:maxit+1), p_arr(0:maxit+1), m_arr(0:maxit+1))
+        
 
         ! Initial values
-        p_arr(0) = p0
-        m_arr(0) = 1.0e-10_8
-        r_arr(0) = 1.0e-10_8
-        m_nrel = 0.0_8
+        p = p0
+        m = 1.0e-20_8
+        r = 1.0e-20_8
+        
 
         i = 0
-        do while (i <= maxit .and. p_arr(i) > 0.0_8)
-            r = r_arr(i)
-            p = p_arr(i)
-            m = m_arr(i)
+        do while (i <= maxit .and. p > 1.0e15_8)
             
             ! Calculate the Runge-Kutta coefficients for pressure and mass
             k1_p = dp_dr(r, p, m)
             k1_m = dm_dr(r, p, m)
 
-            k2_p = dp_dr(r + del_r / 2.0_8, p + k1_p / 2.0_8, m + k1_m / 2.0_8)
-            k2_m = dm_dr(r + del_r / 2.0_8, p + k1_p / 2.0_8, m + k1_m / 2.0_8)
+            r2 = r + del_r/2.0_8
+            p2 = p + del_r * k1_p / 2
+            m2 = m + del_r * k1_m / 2
+            k2_p = dp_dr(r2, p2, m2)
+            k2_m = dm_dr(r2, p2, m2)
 
-            k3_p = dp_dr(r + del_r / 2.0_8, p + k2_p / 2.0_8, m + k2_m / 2.0_8)
-            k3_m = dm_dr(r + del_r / 2.0_8, p + k2_p / 2.0_8, m + k2_m / 2.0_8)
 
-            k4_p = dp_dr(r + del_r, p + k3_p, m + k3_m)
-            k4_m = dm_dr(r + del_r, p + k3_p, m + k3_m)
+            r3 = r2
+            p3 = p + del_r * k2_p / 2.0_8
+            m3 = m + del_r * k2_m / 2.0_8
+            k3_p = dp_dr(r3, p3, m3)
+            k3_m = dm_dr(r3, p3, m3)
+
+            r_4 = r2 + del_r/2.0_8
+            p4 = p + del_r * k3_p
+            m4 = m + del_r * k3_m
+            k4_p = dp_dr(r_4, p4, m4)
+            k4_m = dm_dr(r_4, p4, m4)
 
             ! Update pressure and mass using the weighted sum of the Runge-Kutta coefficients
-            p_new = p_arr(i) + (k1_p + 2.0_8 * k2_p + 2.0_8 * k3_p + k4_p) / 6.0_8 * del_r
-            m_new = m_arr(i) + (k1_m + 2.0_8 * k2_m + 2.0_8 * k3_m + k4_m) / 6.0_8 * del_r
-            r_new = r_arr(i) + del_r
+            p = p + (k1_p + 2 * k2_p + 2 * k3_p + k4_p) / 6 * del_r
+            m = m + (k1_m + 2 * k2_m + 2 * k3_m + k4_m) / 6 * del_r
+            r = r + del_r
 
-            ! Append the new values to the arrays
-            p_arr(i+1) = p_new
-            m_arr(i+1) = m_new
-            r_arr(i+1) = r_new
 
             ! Increment the iteration counter
             i = i + 1
         end do
 
         ! Output the final mass and radius
-        final_mass_radius_iteration(1) = m_arr(i-1)/M0
-        final_mass_radius_iteration(2) = r_arr(i-1)/1e5_8
+        final_mass_radius_iteration(1) = m/M0
+        final_mass_radius_iteration(2) = r/1e5_8
         final_mass_radius_iteration(3) = i
 
 
 
-        ! Deallocate arrays
-        deallocate(r_arr, p_arr, m_arr)
-    end function solve_TOV
+        end function solve_TOV
 
     real(8) function dp_dr(r, p, m)
         implicit none
@@ -93,7 +95,7 @@ contains
         implicit none
         real(8), intent(in) :: r, p, m
         ! TOV equation
-        dm_dr = 4 * pi * r**2 * e(root(p)) / c2
+        dm_dr = 4 * pi * r ** 2 * e(root(p)) / c2
         
     end function dm_dr
 

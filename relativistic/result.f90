@@ -2,7 +2,7 @@ program main
     use TOV_solver
     implicit none
 
-    real(8) :: p_i = 1.0e30_8, p_f = 1.0e31_8
+    real(8) :: p_i = 1.0e32_8, p_f = 1.0e35_8
     real(8) :: p_max = 3.5e35
     real(8), parameter :: del_r = 1.0e2_8
     integer, parameter :: maxit = 1e7
